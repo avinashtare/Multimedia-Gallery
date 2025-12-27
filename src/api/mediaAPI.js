@@ -1,5 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { apiRoute } from "../constant/routes";
 
 const UNSPLASH_KEY = import.meta.env.FRONTEND_UNSPLASH_KEY;
 const TENOR_KEY = import.meta.env.FRONTEND_TENOR_KEY;
@@ -8,7 +9,8 @@ const PEXELS_KEY = import.meta.env.FRONTEND_PEXELS_KEY;
 export const fetchPhotos = createAsyncThunk(
   "fetchPhotos",
   async ({ query, page = 1, per_page = 20 }) => {
-    const res = await axios.get("https://api.unsplash.com/search/photos", {
+    const res = await axios.get(apiRoute.unsplash.search.url, {
+      method: apiRoute.unsplash.search.method,
       params: { query, page, per_page },
       headers: { Authorization: `Client-ID ${UNSPLASH_KEY}` },
     });
@@ -19,7 +21,8 @@ export const fetchPhotos = createAsyncThunk(
 export const fetchVideos = createAsyncThunk(
   "fetchVideos",
   async ({ query, page = 1, per_page = 20 }) => {
-    const res = await axios.get("https://api.pexels.com/videos/search", {
+    const res = await axios(apiRoute.pexels.search.url, {
+      method: apiRoute.pexels.search.method,
       params: { query, page, per_page },
       headers: { Authorization: PEXELS_KEY },
     });
@@ -30,8 +33,9 @@ export const fetchVideos = createAsyncThunk(
 export const fetchGIF = createAsyncThunk(
   "fetchGIF",
   async ({ query, page = 1, per_page = 20 }) => {
-    const res = await axios.get("https://tenor.googleapis.com/v2/search", {
+    const res = await axios(apiRoute.tenor.search.url, {
       params: {
+        method: apiRoute.tenor.search.method,
         q: query,
         pos: page,
         limit: per_page,
